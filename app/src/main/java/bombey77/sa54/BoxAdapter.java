@@ -7,44 +7,46 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-/**
- * Created by Ромашка on 12.03.2017.
- */
-
 public class BoxAdapter extends BaseAdapter {
-
-    Context context;
-    ArrayList <Product> objects;
+    Context ctx;
     LayoutInflater lInflater;
+    ArrayList<Product> objects;
 
-    BoxAdapter(Context context, ArrayList <Product> products) {
-        this.context = context;
-        this.objects = products;
-        lInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    BoxAdapter(Context context, ArrayList<Product> products) {
+        ctx = context;
+        objects = products;
+        lInflater = (LayoutInflater) ctx
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    // кол-во элементов
     @Override
     public int getCount() {
         return objects.size();
     }
 
+    // элемент по позиции
     @Override
     public Object getItem(int position) {
         return objects.get(position);
     }
 
+    // id по позиции
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    // пункт списка
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        // используем созданные, но не используемые view
         View view = convertView;
         if (view == null) {
             view = lInflater.inflate(R.layout.item, parent, false);
@@ -52,34 +54,43 @@ public class BoxAdapter extends BaseAdapter {
 
         Product p = getProduct(position);
 
-        ((TextView) view.findViewById(R.id.tvDescr)).setText(p.getName());
-        ((TextView) view.findViewById(R.id.tvPrice)).setText(p.getPrice() + "");
-        ((ImageView) view.findViewById(R.id.ivImage)).setImageResource(p.getImage());
+        // заполняем View в пункте списка данными из товаров: наименование, цена
+        // и картинка
+        ((TextView) view.findViewById(R.id.tvDescr)).setText(p.name);
+        ((TextView) view.findViewById(R.id.tvPrice)).setText(p.price + "");
+        ((ImageView) view.findViewById(R.id.ivImage)).setImageResource(p.image);
 
-        CheckBox checkBox = (CheckBox) view.findViewById(R.id.cbBox);
-        checkBox.setOnCheckedChangeListener(onCheckedChangeListener);
-        checkBox.setTag(position);
-        checkBox.setChecked(p.box);
+        CheckBox cbBuy = (CheckBox) view.findViewById(R.id.cbBox);
+        // присваиваем чекбоксу обработчик
+        cbBuy.setOnCheckedChangeListener(myCheckChangeList);
+        // пишем позицию
+        cbBuy.setTag(position);
+        // заполняем данными из товаров: в корзине или нет
+        cbBuy.setChecked(p.box);
         return view;
     }
 
+    // товар по позиции
     Product getProduct(int position) {
         return ((Product) getItem(position));
     }
 
-    ArrayList <Product> getBox() {
-        ArrayList <Product> box = new ArrayList<>();
+    // содержимое корзины
+    ArrayList<Product> getBox() {
+        ArrayList<Product> box = new ArrayList<Product>();
         for (Product p : objects) {
-            if (p.box){
+            // если в корзине
+            if (p.box)
                 box.add(p);
-            }
         }
         return box;
     }
 
-    CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    // обработчик для чекбоксов
+    OnCheckedChangeListener myCheckChangeList = new OnCheckedChangeListener() {
+        public void onCheckedChanged(CompoundButton buttonView,
+                                     boolean isChecked) {
+            // меняем данные товара (в корзине или нет)
             getProduct((Integer) buttonView.getTag()).box = isChecked;
         }
     };

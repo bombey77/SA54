@@ -1,14 +1,14 @@
 package bombey77.sa54;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     ArrayList<Product> products = new ArrayList<Product>();
     BoxAdapter boxAdapter;
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         String result = "Товары в корзине:";
         for (Product p : boxAdapter.getBox()) {
             if (p.box)
-                result += "\n" + p.getName();
+                result += "\n" + p.name;
         }
         Toast.makeText(this, result, Toast.LENGTH_LONG).show();
     }

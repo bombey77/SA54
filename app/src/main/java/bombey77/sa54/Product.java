@@ -6,39 +6,16 @@ package bombey77.sa54;
 
 public class Product {
 
-    private String name;
-    private int price;
-    private int image;
+    String name;
+    int price;
+    int image;
     boolean box;
 
-    Product(final String describe, final int price, final int image, final boolean box) {
-        this.name = describe;
-        this.price = price;
-        this.image = image;
-        this.box = box;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public int getImage() {
-        return image;
-    }
-
-    public void setBox(boolean box) {
-        this.box = box;
+    Product(String _describe, int _price, int _image, boolean _box) {
+        name = _describe;
+        price = _price;
+        image = _image;
+        box = _box;
     }
 }
